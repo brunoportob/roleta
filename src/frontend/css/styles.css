@@ -1,4 +1,8 @@
 /* Estilos principais da aplicação (restaurados) */
+:root {
+	/* Permite trocar facilmente a cor de fundo quando a roleta está em modo expansivo */
+	--fullscreen-bg: #ffffff; /* antes era rgba(0,0,0,0.85) */
+}
 html, body { height:100%; }
 body {
 	font-family: Arial, sans-serif;
@@ -79,8 +83,10 @@ body {
 .center-expand-btn.spin-mode:hover { background:linear-gradient(145deg,#ff9800,#f57c00); }
 @keyframes pulseSpinBtn { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.08); } }
 
-/* Fullscreen overlay */
-.wheel-full-overlay { position: fixed; inset:0; background: rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:1000; }
+/* Fullscreen overlay - agora fundo branco para foco total na roleta */
+.wheel-full-overlay { position: fixed; inset:0; background: var(--fullscreen-bg); display:none; align-items:center; justify-content:center; z-index:1000; }
+/* Opcional: leve borda/sombra na roda para destacá-la sobre fundo branco */
+.wheel-full-overlay .wheel { filter: drop-shadow(0 6px 28px rgba(0,0,0,0.18)); }
 .wheel-full-inner { position:relative; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2vmin; box-sizing:border-box; }
 .full-wheel-wrapper { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:30px; width:100%; max-width:96vmin; }
 .full-wheel-wrapper .wheel { width:100%; height:auto; aspect-ratio:1/1; max-width:96vmin; max-height:96vmin; }
@@ -496,7 +502,10 @@ body { overflow-x:auto; }
 .wheel-section { position:relative; }
 .no-items-overlay-active #wheel-container { filter:grayscale(.4) brightness(.75); transition:filter .35s; }
 .no-items-overlay { position:absolute; inset:0; display:none; align-items:center; justify-content:center; pointer-events:none; z-index:20; }
-.no-items-card { pointer-events:auto; background:#fff; border:2px solid #ffcc80; box-shadow:0 8px 28px rgba(0,0,0,0.25); border-radius:16px; padding:34px 44px 28px; text-align:center; max-width:340px; font-weight:600; font-size:20px; line-height:1.3; color:#663c00; animation:emptyPulse .55s ease; transform:translateY(-28px); }
+	.no-items-card { pointer-events:auto; background:#fff; border:2px solid #ffcc80; box-shadow:0 8px 28px rgba(0,0,0,0.25); border-radius:16px; padding:34px 44px 28px; text-align:center; max-width:340px; font-weight:600; font-size:20px; line-height:1.3; color:#663c00; animation:emptyPulse .55s ease; transform:translateY(-28px); 
+		/* Garantir centralização absoluta na roleta */
+		pointer-events: none;
+	}
 .no-items-card h4 { margin:0 0 8px; font-size:22px; color:#ff9100; }
 .no-items-card p { margin:0 0 18px; font-size:15px; font-weight:500; color:#444; }
 .no-items-card button { background:#2196F3; color:#fff; border:none; border-radius:8px; padding:11px 20px; font-size:15px; cursor:pointer; font-weight:600; }
