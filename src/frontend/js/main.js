@@ -29,24 +29,13 @@ function clamp(v,min,max){ return Math.min(max, Math.max(min,v)); }
   // Garante que o DOM dos botões existe antes de primeira atualização
   requestAnimationFrame(()=>{
     updateInterface();
-    if(Object.keys(store.items).length===0){ forceEmptyOverlay(); }
   });
   // Flush imediato ao fechar/atualizar janela
   window.addEventListener('beforeunload', ()=>{ if(store.saveTimeout){ clearTimeout(store.saveTimeout); store.persist(); } });
 })();
 
-function forceEmptyOverlay(){
-  const ov=document.getElementById('no-items-overlay');
-  const wheelSection=document.querySelector('.wheel-section');
-  const titleEl=document.getElementById('no-items-title');
-  const textEl=document.getElementById('no-items-text');
-  if(!ov || !titleEl || !textEl) return;
-  if(Object.keys(store.items).length>0) return; // só se realmente vazio
-  titleEl.textContent='Nenhum item';
-  textEl.textContent='Nenhum item pra sortear.';
-  ov.style.display='flex';
-  wheelSection?.classList.add('no-items-overlay-active');
-}
+// Removido overlay visual quando vazio; apenas cinza e mensagem na lista
+// forceEmptyOverlay removido (substituído por mensagem textual)
 
 function cacheDom(){
   fullOverlayEl = $('#wheel-full-overlay');
@@ -153,7 +142,8 @@ function updateInterface(){
   } else {
     $('#wheel-segments').innerHTML=''; $('#items-edit-list').innerHTML=''; $('#spin-button').disabled=true;
     // Fallback imediato para exibir overlay vazio antes mesmo de checkGameStatus (caso algum retorno precoce ocorra)
-    showEmptyOverlaySimplified();
+    const list = $('#items-edit-list');
+    list.innerHTML = `<div style="padding:18px 14px; color:#666; font-size:14px; font-style:italic;">Nenhum item para sortear.</div>`;
   }
   const pct = store.meta.itemChancePercent ?? 50;
   const range = document.getElementById('prob-item-range');
@@ -177,53 +167,14 @@ function updatePlaceholderButton(){
 function checkGameStatus(){
   const positives = Object.entries(store.items).filter(([n,q])=>!n.startsWith('Nenhum item') && q>0);
   const totalItems = Object.keys(store.items).length;
-  const overlay = $('#no-items-overlay');
-  const wheelSection = document.querySelector('.wheel-section');
-  const titleEl = document.getElementById('no-items-title');
-  const textEl = document.getElementById('no-items-text');
-  const actionsEl = document.getElementById('no-items-actions');
-  if(!overlay || !titleEl || !textEl || !actionsEl) return;
+  // Overlay de vazio foi removido – somente lógica de habilitar/desabilitar botão permanece
 
-  if(positives.length===0){
-    $('#spin-button').disabled=true;
-    wheelSection?.classList.add('no-items-overlay-active');
-    overlay.style.display='flex';
-    actionsEl.innerHTML='';
-    if(totalItems===0){
-      // Estado vazio
-      overlay.querySelector('.no-items-card').dataset.mode='empty';
-      titleEl.textContent='Nenhum item';
-      textEl.textContent='Nenhum item pra sortear.';
-      actionsEl.innerHTML='';
-    } else {
-      // Finalizado (todos itens consumidos ou zerados)
-      overlay.querySelector('.no-items-card').dataset.mode='finished';
-      titleEl.textContent='Fim';
-      textEl.textContent='Todos os itens foram sorteados!';
-      actionsEl.innerHTML='<button id="clear-all-finish" type="button">Limpar tudo</button>';
-      document.getElementById('clear-all-finish')?.addEventListener('click', ()=>{
-        if(confirm('Limpar tudo?')){ store.items={}; wheel.currentRotation=0; updateInterface(); store.scheduleSave(); }
-      });
-    }
-  } else {
-    overlay.style.display='none';
-    wheelSection?.classList.remove('no-items-overlay-active');
-    if(!wheel.wheelSpinning) $('#spin-button').disabled=false;
-  }
+  // Agora apenas desabilita botão se não houver itens positivos
+  if(positives.length===0){ $('#spin-button').disabled=true; }
+  else if(!wheel.wheelSpinning) $('#spin-button').disabled=false;
 }
 
-function showEmptyOverlaySimplified(){
-  if(Object.keys(store.items).length!==0) return; // só quando realmente vazio
-  const overlay = document.getElementById('no-items-overlay');
-  const wheelSection = document.querySelector('.wheel-section');
-  const titleEl = document.getElementById('no-items-title');
-  const textEl = document.getElementById('no-items-text');
-  if(!overlay || !titleEl || !textEl) return;
-  titleEl.textContent='Nenhum item';
-  textEl.textContent='Nenhum item pra sortear.';
-  overlay.style.display='flex';
-  wheelSection?.classList.add('no-items-overlay-active');
-}
+// showEmptyOverlaySimplified removido
 
 // ---------- Lista de Itens ----------
 function createItemsEditList(){

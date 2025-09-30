@@ -1,2 +1,11 @@
 #probItem=100
 #probNone=100
+Nenhum item 2:0
+Bola:5
+Torresmo:10
+Pendrive:14
+Notebook:4
+Lapis:5
+Copo:4
+Vidro:9
+Nenhum item:0
