@@ -1,0 +1,8 @@
+#probItem=100
+#probNone=100
+Nenhum item 2:0
+Nenhum item:0
+Case Bolsa Portátil:19
+USB-C to USB-C Cable:10
+Case Bag Estojo Organizador:9
+Notebook:5

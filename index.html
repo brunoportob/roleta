@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roleta de Itens</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="./src/frontend/css/styles.css">
+</head>
+<body>
+
+<div class="main-container">
+    <h1>Roleta de Itens
+        <div class="header-actions">
+          <button id="open-history" class="prob-config-button history-button" title="Ver histórico" aria-label="Ver histórico">🕘</button>
+          <button id="open-prob-panel" class="prob-config-button" title="Configurar probabilidade" aria-label="Configurar probabilidades">⚙️</button>
+        </div>
+    </h1>
+    
+    <div class="content-grid no-history">
+        <!-- Centro - Roleta -->
+        <div class="wheel-section">
+            <div id="wheel-container">
+                <div class="pointer"></div>
+                <div id="wheel" class="wheel">
+                    <svg id="wheel-svg" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet">
+                        <g id="wheel-segments"></g>
+                    </svg>
+                                        <div class="wheel-center">
+                                                <!-- Botão central mantém funcionalidade. A imagem (logo) é opcional -->
+                                                <button id="expand-wheel" class="center-expand-btn" title="Expandir / Fechar">
+                                                    <img id="center-logo" src="./src/frontend/img/logo.png" alt="logo" style="display:none;" />
+                                                    <span class="center-icon">⛶</span>
+                                                </button>
+                                        </div>
+                </div>
+            </div>
+                        <!-- Overlay sem itens -->
+                                                            <div id="no-items-overlay" class="no-items-overlay" style="display:none;">
+                                                                <div class="no-items-card" data-mode="empty">
+                                                                    <h4 id="no-items-title">Nenhum item</h4>
+                                                                    <p id="no-items-text">Nenhum item pra sortear.</p>
+                                                                    <div id="no-items-actions" style="display:none;"></div>
+                                                                </div>
+                                                            </div>
+            
+            <button id="spin-button" class="spin-button" disabled>GIRAR ROLETA</button>
+            
+            <!-- finished-message removido: estado final agora usa overlay -->
+        </div>
+        
+    <!-- Lado direito - Edição de itens -->
+        <div class="items-section">
+            <div class="items-edit-section">
+                <h3>Gerenciar Itens:</h3>
+                <div class="placeholder-controls">
+                    <button id="add-placeholder" class="placeholder-add-btn" title="Adicionar placeholder 'Não foi dessa vez'" aria-label="Adicionar placeholder"><span id="placeholder-add-label">Não foi dessa vez (+)</span></button>
+                </div>
+                
+                <div class="add-item-inline">
+                    <input type="text" id="new-item-name" placeholder="Nome do item">
+                    <input type="number" id="new-item-quantity" placeholder="Qtd." min="1">
+                    <button id="add-item-inline" class="add-button">+ Adicionar</button>
+                </div>
+                
+                <div id="items-edit-list"></div>
+                
+                <div class="action-buttons" style="display: none;">
+                    <button id="create-wheel" class="create-button">Atualizar Roleta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay de roleta expandida -->
+<div id="wheel-full-overlay" class="wheel-full-overlay" style="display:none;">
+  <div class="wheel-full-inner">
+      <button id="close-full" class="close-full">✕</button>
+      <div class="full-wheel-wrapper">
+          <!-- Clonado dinamicamente -->
+          <div id="full-wheel-slot"></div>
+          <button id="spin-button-full" class="spin-button" disabled>GIRAR ROLETA</button>
+      </div>
+      <div id="effect-container" class="effect-container"></div>
+  </div>
+</div>
+
+<!-- Canvas/Efeito confetes/nuvem -->
+<div id="fx-confetti" class="fx-confetti" style="pointer-events:none; display:none;"></div>
+<div id="fx-cloud" class="fx-cloud" style="pointer-events:none; display:none;"></div>
+
+<!-- Painel de configuração de probabilidade -->
+<div id="prob-overlay" class="prob-overlay" style="display:none;">
+    <div class="prob-panel">
+        <h2>Probabilidades</h2>
+        <div class="prob-row">
+          <label style="display:block; font-weight:600; margin-bottom:6px;">Distribuição de Probabilidade</label>
+          <input type="range" id="prob-item-range" min="0" max="100" value="50" step="1" style="width:100%;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-top:4px;">
+            <span><strong>Itens</strong>: <span id="prob-item-display">50</span>%</span>
+            <span><strong>Nenhum item</strong>: <span id="prob-none-display">50</span>%</span>
+          </div>
+        </div>
+        <p class="small-note">A barra divide a probabilidade total entre itens reais e placeholders. Dentro de cada grupo os segmentos têm chance igual. Se não houver itens (ou placeholders), 100% vai para o grupo existente.</p>
+        <button id="close-prob" class="create-button">Salvar / Fechar</button>
+    </div>
+</div>
+
+<!-- Overlay de histórico -->
+<div id="history-overlay" class="history-overlay" style="display:none;">
+    <div class="history-panel">
+        <h2>Histórico</h2>
+        <ul id="history-list" class="history-list"></ul>
+        <div class="history-actions">
+            <button id="history-clear" class="create-button danger">Limpar histórico</button>
+            <button id="history-close" class="create-button">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Carregando versão modular -->
+<script type="module" src="./src/frontend/js/main.js"></script>
+
+</body>
+</html>

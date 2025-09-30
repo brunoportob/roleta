@@ -1,0 +1,46 @@
+{
+  "name": "roleta-sorteio",
+  "version": "1.0.0",
+  "description": "Roleta de itens com persistência em arquivo texto",
+  "main": "src/electron/electron-main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server/server.js",
+    "dev": "nodemon src/server/server.js",
+    "electron": "electron .",
+    "dist": "electron-builder --win --x64",
+    "rebuild": "electron-rebuild -f -w better-sqlite3",
+    "postinstall": "npm run rebuild || echo rebuild skipped"
+  },
+  "build": {
+    "appId": "com.roleta.sorteio",
+    "productName": "Roleta de Itens",
+    "win": { "sign": false },
+    "asar": true,
+    "asarUnpack": [
+      "**/*.node"  
+    ],
+    "files": [
+      "index.html",
+      "itens.txt",
+      "src/frontend/js/**/*",
+      "src/frontend/css/**/*",
+      "src/frontend/img/**/*",
+      "src/electron/electron-main.js",
+      "src/electron/preload.js",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "directories": { "buildResources": "build", "output": "roleta" }
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.13.3",
+    "nodemon": "^3.1.0",
+    "electron-rebuild": "^3.0.0"
+  }
+}
